@@ -1,5 +1,6 @@
 {
   "name": "love-and-producer-cost-counter",
+  "homepage": "https://lininu.github.io/love-and-producer-cost-counter",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -25,7 +26,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -37,6 +40,7 @@
     "not op_mini all"
   ],
   "devDependencies": {
-    "@types/lodash": "^4.14.123"
+    "@types/lodash": "^4.14.123",
+    "gh-pages": "^2.0.1"
   }
 }
