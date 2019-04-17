@@ -3,60 +3,42 @@ import { InputNumber } from 'antd';
 import * as _ from 'lodash';
 import numeral from 'numeral';
 import classnames from 'classnames';
-
-const fragmentTotal = 80;
-const activityItemsToSingleFragment = 79;
-
-const GAVIN_ACTIVITY_ITEM = '白起的寫真';
-const FRAGEMNT = '碎片';
+import {
+  activityItems,
+  expectAverage,
+  free as freeDefault,
+  preGrantTotalItems,
+  preGiftItems,
+  averageMax,
+  averageMin,
+  perDimandCost,
+  milestoneGiftDimand,
+  fragmentTotal,
+  activityItemsToSingleFragment,
+} from '../db/boiling';
+import * as CONST from './../constant/boiling';
+import { NUMERAL_FORMAT } from './../constant/config';
 
 class Boiling extends Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {
-      count: 1.25,
-      free: 15,
+      count: expectAverage,
+      free: freeDefault,
       option: {
-        '0420前累消2600鑽送': { [GAVIN_ACTIVITY_ITEM]: 850 },
-        '登入送': { [GAVIN_ACTIVITY_ITEM]: 200 },
-        '寫真換一碎片': { [GAVIN_ACTIVITY_ITEM]: activityItemsToSingleFragment },
-        '總共需要碎片': fragmentTotal,
-        '總共需要寫真': activityItemsToSingleFragment * fragmentTotal,
-        '掉率': {
-          max: 2,
-          min: 1
+        [CONST.GRAND_TOTAL_GIFT_ACTIVITY_ITEMS]: { [CONST.ACTIVITY_ITEM]: preGrantTotalItems },
+        [CONST.LOGIN_GIFT_ACTIVITY_ITEMS]: { [CONST.ACTIVITY_ITEM]: preGiftItems },
+        [CONST.ACTIVITY_ITEM_TO_FRAGEMNT]: { [CONST.ACTIVITY_ITEM]: activityItemsToSingleFragment },
+        [CONST.TOTAL_FRAGEMNT]: fragmentTotal,
+        [CONST.TOTAL_ACTIVITY_ITEMS]: activityItemsToSingleFragment * fragmentTotal,
+        [CONST.AVERAGE]: {
+          max: averageMax,
+          min: averageMin
         },
-        '重置所需鑽數': 3,
-        '拍攝里程碑反鑽數': 1440,
+        [CONST.RESET_DIMAND_COST]: perDimandCost,
+        [CONST.MILESTONE_DIMAND_GIFT]: milestoneGiftDimand,
       },
-      dataSource: [{
-        key: '穿搭提示',
-        '售價': 30,
-        '鑽石': 85,
-        [GAVIN_ACTIVITY_ITEM]: 79,
-        '金幣': 3700,
-        '紙鶴串': 10,
-        '上限': 3,
-        '建議': 3,
-      }, {
-        key: '精緻配飾',
-        '售價': 150,
-        '鑽石': 280,
-        [GAVIN_ACTIVITY_ITEM]: 98,
-        '金幣': 4700,
-        '紙鶴串': 24,
-        '上限': 3,
-        '建議': 0,
-      }, {
-        key: '棚拍秘笈',
-        '售價': 390,
-        '鑽石': 880,
-        [GAVIN_ACTIVITY_ITEM]: 498,
-        '金幣': 24000,
-        '紙鶴串': 120,
-        '上限': 5,
-        '建議': 3,
-      }]
+      dataSource: activityItems
     };
   }
 
@@ -67,24 +49,24 @@ class Boiling extends Component<any, any> {
   reccount(isInit = false) {
     const { dataSource, option, count, free } = this.state;
     const countedData = dataSource.map((data: any) => {
-      const totalOwnDimand = data['鑽石'] + (data[GAVIN_ACTIVITY_ITEM] / count * option['重置所需鑽數']);
-      const totalOwnPhoto = data['鑽石'] / option['重置所需鑽數'] * count + data[GAVIN_ACTIVITY_ITEM];
+      const totalOwnDimand = data[CONST.DIMAND] + (data[CONST.ACTIVITY_ITEM] / count * option[CONST.RESET_DIMAND_COST]);
+      const totalOwnPhoto = data[CONST.DIMAND] / option[CONST.RESET_DIMAND_COST] * count + data[CONST.ACTIVITY_ITEM];
       data = {
         ...data,
-        asumeCount: isInit ? data['建議'] : data.asumeCount,
-        '(鑽石+白起的寫真)換算鑽石數': totalOwnDimand,
-        '1元幾鑽(只算鑽石+寫真)': totalOwnDimand / data['售價'],
-        '可得寫真': totalOwnPhoto,
-        '可得碎片': totalOwnPhoto / activityItemsToSingleFragment,
+        asumeCount: isInit ? data[CONST.ADVICE] : data.asumeCount,
+        [CONST.CONVERT_DIMAND]: totalOwnDimand,
+        [CONST.PROICE_PERCENTAGE]: totalOwnDimand / data[CONST.PRICE],
+        [CONST.OWN_ACTIVITY_ITEMS]: totalOwnPhoto,
+        [CONST.OWN_ACTIVITY_ITEMS_TO_FRAGEMNT]: totalOwnPhoto / activityItemsToSingleFragment,
       };
       if (isInit) {
-        data['預計購買'] = <InputNumber key={`預計購買_${data.key}`} min={0} max={data['上限']} defaultValue={data['建議']} onChange={value => {
+        data[CONST.EXPECT_PURCHASE] = <InputNumber key={`${CONST.EXPECT_PURCHASE}_${data.key}`} min={0} max={data[CONST.LIMIT]} defaultValue={data[CONST.ADVICE]} onChange={value => {
           this.setState({
             dataSource: this.state.dataSource.map((d: any) => {
               if (d.key === data.key) {
-                const totalOwnPhoto = d['鑽石'] / option['重置所需鑽數'] * this.state.count + d[GAVIN_ACTIVITY_ITEM];
+                const totalOwnPhoto = d[CONST.DIMAND] / option[CONST.RESET_DIMAND_COST] * this.state.count + d[CONST.ACTIVITY_ITEM];
                 d.asumeCount = value;
-                d['預計可得寫真'] = d.asumeCount * totalOwnPhoto;
+                d[CONST.EXPECT_OWN_TOTAL_ACTIVITY_ITEMS] = d.asumeCount * totalOwnPhoto;
               }
               return d;
             })
@@ -92,7 +74,7 @@ class Boiling extends Component<any, any> {
         }} />
       }
 
-      data['預計可得寫真'] = data.asumeCount * totalOwnPhoto;
+      data[CONST.EXPECT_OWN_TOTAL_ACTIVITY_ITEMS] = data.asumeCount * totalOwnPhoto;
     
       return data;
     });
@@ -101,11 +83,11 @@ class Boiling extends Component<any, any> {
 
   render() {
     const { dataSource, option, count, free } = this.state;
-    const totalPhoto = option['總共需要寫真'] - _.sumBy(this.state.dataSource, (d: any) => d['預計可得寫真']) - option['0420前累消2600鑽送'][GAVIN_ACTIVITY_ITEM] - option['登入送'][GAVIN_ACTIVITY_ITEM] - free - option['拍攝里程碑反鑽數'] / option['重置所需鑽數'] * count;
-    // console.log(option['總共需要寫真'], _.sumBy(this.state.dataSource, (d: any) => d['預計可得寫真']), option['0420前累消2600鑽送'][GAVIN_ACTIVITY_ITEM], option['登入送'][GAVIN_ACTIVITY_ITEM], free, option['拍攝里程碑反鑽數'] / option['重置所需鑽數'] * count)
+    const totalPhoto = option[CONST.TOTAL_ACTIVITY_ITEMS] - _.sumBy(this.state.dataSource, (d: any) => d[CONST.EXPECT_OWN_TOTAL_ACTIVITY_ITEMS]) - option[CONST.GRAND_TOTAL_GIFT_ACTIVITY_ITEMS][CONST.ACTIVITY_ITEM] - option[CONST.LOGIN_GIFT_ACTIVITY_ITEMS][CONST.ACTIVITY_ITEM] - free - option[CONST.MILESTONE_DIMAND_GIFT] / option[CONST.RESET_DIMAND_COST] * count;
+    // console.log(option[CONST.TOTAL_ACTIVITY_ITEMS], _.sumBy(this.state.dataSource, (d: any) => d[CONST.EXPECT_OWN_TOTAL_ACTIVITY_ITEMS]), option[CONST.GRAND_TOTAL_GIFT_ACTIVITY_ITEMS][CONST.ACTIVITY_ITEM], option[CONST.LOGIN_GIFT_ACTIVITY_ITEMS][CONST.ACTIVITY_ITEM], free, option[CONST.MILESTONE_DIMAND_GIFT] / option[CONST.RESET_DIMAND_COST] * count)
     return (
       <div className="container my-3">
-        <h2>禮包計算機 <small>戀與製作人</small></h2>
+        <h3 className="mb-3">【{CONST.PAGE_TITLE}】禮包計算機 <small>戀與製作人</small></h3>
         <div className="row">
           <div className="col-12 col-lg-7">
             <div className="table-responsive">
@@ -120,17 +102,17 @@ class Boiling extends Component<any, any> {
                 </thead>
                 <tbody>
                   {_.map(dataSource[0], (row: any, key: string) =>
-                    !_.includes(['key', '建議', 'asumeCount'], key) ? 
+                    !_.includes(['key', CONST.ADVICE, 'asumeCount'], key) ? 
                     <tr key={key}>
                       <th className={classnames({
                         'text-right': true,
-                        'text-danger': _.includes(['預計購買'], key)
+                        'text-danger': _.includes([CONST.EXPECT_PURCHASE], key)
                       })}>{key}</th>
                       {_.map(dataSource, (item: any, index: any) => {
                         const displayKey = _.result(dataSource, `[${index}]['key']`);
                         let displayItem = _.result(dataSource, `[${index}][${key}]`);
                         if (_.isNumber(displayItem)) {
-                          displayItem = numeral(displayItem).format('0,0.[000]');
+                          displayItem = numeral(displayItem).format(NUMERAL_FORMAT);
                         }
                         return <td className="text-right" key={`${key}_${displayKey}`} >{displayItem}</td>;
                       })}
@@ -143,16 +125,16 @@ class Boiling extends Component<any, any> {
               <table className="table table-striped">
                 <tbody>
                   <tr className="bg-secondary text-white">
-                    <th className="text-right">課金總額</th>
-                    <td className="text-right">NT$&nbsp;{numeral(_.sumBy(this.state.dataSource, (d: any) => d.asumeCount * d['售價'])||0).format('0,0.[000]')}</td>
+                    <th className="text-right">{CONST.TOTAL_PRICE}</th>
+                    <td className="text-right">NT$&nbsp;{numeral(_.sumBy(this.state.dataSource, (d: any) => d.asumeCount * d[CONST.PRICE])||0).format(NUMERAL_FORMAT)}</td>
                   </tr>
                   <tr>
-                    <th className="text-right">仍需寫真數</th>
-                    <td className="text-right">{numeral(totalPhoto).format('0,0.[000]')}</td>
+                    <th className="text-right">{CONST.NEEDED_ACTIVITY_ITEMS}</th>
+                    <td className="text-right">{numeral(totalPhoto).format(NUMERAL_FORMAT)}</td>
                   </tr>
                   <tr className="bg-danger text-white">
-                    <th className="text-right">除了活動禮包、反鑽等鑽石，額外需要的存鑽量</th>
-                    <td className="text-right">{numeral(totalPhoto / count * option['重置所需鑽數']).format('0,0.[000]')}</td>
+                    <th className="text-right">{CONST.NEEDED_DIMAND}</th>
+                    <td className="text-right">{numeral(totalPhoto / count * option[CONST.RESET_DIMAND_COST]).format(NUMERAL_FORMAT)}</td>
                   </tr>
                 </tbody>
               </table>
@@ -163,16 +145,16 @@ class Boiling extends Component<any, any> {
               <table className="table table-striped">
                 <tbody>
                   <tr>
-                    <th className="text-right">免費拍攝次數</th>
-                    <td className="text-right"><InputNumber key="免費拍攝次數" min={15} max={15 * option['掉率']['max']} defaultValue={free} onChange={value => {
+                    <th className="text-right">{CONST.FREE_ACTIVITY_COUNT}</th>
+                    <td className="text-right"><InputNumber key={CONST.FREE_ACTIVITY_COUNT} min={freeDefault} max={free * option[CONST.AVERAGE]['max']} defaultValue={freeDefault} onChange={value => {
                       this.setState({ free: value }, () => {
                         this.setState({ dataSource: this.reccount() });
                       });
                     }}/></td>
                   </tr>
                   <tr>
-                    <th className="text-right">預計掉落個數</th>
-                    <td className="text-right"><InputNumber key="預計掉落個數" step={0.01} min={option['掉率']['min']} max={option['掉率']['max']} defaultValue={count} onChange={value => {
+                    <th className="text-right">{CONST.AVERAGE_ACTIVITY_ITEMS}</th>
+                    <td className="text-right"><InputNumber key={CONST.AVERAGE_ACTIVITY_ITEMS} step={0.01} min={option[CONST.AVERAGE]['min']} max={option[CONST.AVERAGE]['max']} defaultValue={count} onChange={value => {
                       this.setState({ count: value }, () => {
                         this.setState({ dataSource: this.reccount() });
                       });
@@ -181,7 +163,7 @@ class Boiling extends Component<any, any> {
                   {_.map(option, (opt: any, key: string) => {
                     const value = _.isObject(opt) ? _.map(opt, (val, k) => numeral(val).format('0,0')).join('') : numeral(opt).format('0,0');
 
-                    return !_.includes(['掉率', 'asumeCount'], key) ?
+                    return !_.includes([CONST.AVERAGE, 'asumeCount'], key) ?
                       <tr key={key}>
                         <th className="text-right">{key}</th>
                         <td className="text-right">{value}</td>
@@ -190,6 +172,27 @@ class Boiling extends Component<any, any> {
                 </tbody>
               </table>
             </div>
+          </div>
+        </div>
+        <hr />
+        <p className="text-black-50 mb-2">CHANGELOG</p>
+        <p className="text-black-50 small mb-1">[19.04.17] 名稱異動</p>
+        <div className="d-table w-100 text-black-50 small">
+          <div className="d-table-row">
+            <div className="d-table-cell pr-1 width--xs text-nowrap">※</div>
+            <div className="d-table-cell">預計掉落個數 → 平均掉落個數</div>
+          </div>
+          <div className="d-table-row">
+            <div className="d-table-cell pr-1 width--xs text-nowrap">※</div>
+            <div className="d-table-cell">(鑽石+白起的寫真)換算鑽石數 → (鑽石+寫真)換算鑽數</div>
+          </div>
+          <div className="d-table-row">
+            <div className="d-table-cell pr-1 width--xs text-nowrap">※</div>
+            <div className="d-table-cell">1元幾鑽(只算鑽石+寫真) → (鑽石+寫真)1元幾鑽</div>
+          </div>
+          <div className="d-table-row">
+            <div className="d-table-cell pr-1 width--xs text-nowrap">※</div>
+            <div className="d-table-cell">可得碎片 → 寫真可換碎片數</div>
           </div>
         </div>
       </div>

@@ -7,3 +7,9 @@
   padding-top: .25rem;
   padding-bottom: .25rem;
 }
+
+.width {
+  &--xs {
+    width: 1rem;
+  }
+}
