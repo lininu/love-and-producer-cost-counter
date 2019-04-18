@@ -15,6 +15,8 @@ import {
   milestoneGiftDimand,
   fragmentTotal,
   activityItemsToSingleFragment,
+  changeLog,
+  qAndA
 } from '../db/boiling';
 import * as CONST from './../constant/boiling';
 import { NUMERAL_FORMAT } from './../constant/config';
@@ -47,7 +49,7 @@ class Boiling extends Component<any, any> {
   }
 
   reccount(isInit = false) {
-    const { dataSource, option, count, free } = this.state;
+    const { dataSource, option, count } = this.state;
     const countedData = dataSource.map((data: any) => {
       const totalOwnDimand = data[CONST.DIMAND] + (data[CONST.ACTIVITY_ITEM] / count * option[CONST.RESET_DIMAND_COST]);
       const totalOwnPhoto = data[CONST.DIMAND] / option[CONST.RESET_DIMAND_COST] * count + data[CONST.ACTIVITY_ITEM];
@@ -87,7 +89,7 @@ class Boiling extends Component<any, any> {
     // console.log(option[CONST.TOTAL_ACTIVITY_ITEMS], _.sumBy(this.state.dataSource, (d: any) => d[CONST.EXPECT_OWN_TOTAL_ACTIVITY_ITEMS]), option[CONST.GRAND_TOTAL_GIFT_ACTIVITY_ITEMS][CONST.ACTIVITY_ITEM], option[CONST.LOGIN_GIFT_ACTIVITY_ITEMS][CONST.ACTIVITY_ITEM], free, option[CONST.MILESTONE_DIMAND_GIFT] / option[CONST.RESET_DIMAND_COST] * count)
     return (
       <div className="container my-3">
-        <h3 className="mb-3">【{CONST.PAGE_TITLE}】禮包計算機 <small>戀與製作人</small></h3>
+        <h1 className="mb-3 h3">【{CONST.PAGE_TITLE}】禮包計算機 <small>戀與製作人</small></h1>
         <div className="row">
           <div className="col-12 col-lg-7">
             <div className="table-responsive">
@@ -175,26 +177,32 @@ class Boiling extends Component<any, any> {
           </div>
         </div>
         <hr />
-        <p className="text-black-50 mb-2">CHANGELOG</p>
-        <p className="text-black-50 small mb-1">[19.04.17] 名稱異動</p>
-        <div className="d-table w-100 text-black-50 small">
-          <div className="d-table-row">
-            <div className="d-table-cell pr-1 width--xs text-nowrap">※</div>
-            <div className="d-table-cell">預計掉落個數 → 平均掉落個數</div>
-          </div>
-          <div className="d-table-row">
-            <div className="d-table-cell pr-1 width--xs text-nowrap">※</div>
-            <div className="d-table-cell">(鑽石+白起的寫真)換算鑽石數 → (鑽石+寫真)換算鑽數</div>
-          </div>
-          <div className="d-table-row">
-            <div className="d-table-cell pr-1 width--xs text-nowrap">※</div>
-            <div className="d-table-cell">1元幾鑽(只算鑽石+寫真) → (鑽石+寫真)1元幾鑽</div>
-          </div>
-          <div className="d-table-row">
-            <div className="d-table-cell pr-1 width--xs text-nowrap">※</div>
-            <div className="d-table-cell">可得碎片 → 寫真可換碎片數</div>
-          </div>
+        <h2 className="mb-3 h4">Q & A</h2>
+        <div className="d-table w-100 text-black-50">
+          {qAndA.map((qa: any, index: number) => [
+            <div key={`qa_${index}_title`} className="d-table-row text-info">
+              <div className="d-table-cell pr-1 text-nowrap">{index + 1}.</div>
+              <div className="d-table-cell"><b>{qa.title}</b></div>
+            </div>,
+            <div key={`qa_${index}_description`} className="d-table-row">
+              <div className="d-table-cell pr-1 text-nowrap"></div>
+              <div className="d-table-cell">{qa.description}</div>
+            </div>
+          ])}
         </div>
+        <hr />
+        <p className="text-black-50 mb-2">CHANGELOG</p>
+        {_.map(changeLog, (log: any, key: string) => [
+          <p key={key} className="text-black-50 small mb-1"><b>{key}</b></p>,
+          <div key={`${key}_content`} className="d-table w-100 text-black-50 small pb-2">
+            {log.map((item: string, index: Number) =>
+              <div key={`${key}_${index}`} className="d-table-row">
+                <div className="d-table-cell pr-1 width--xs text-nowrap">※</div>
+                <div className="d-table-cell">{item}</div>
+              </div>
+            )}
+          </div>
+        ])}
       </div>
     );
   }
