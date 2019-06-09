@@ -4,15 +4,15 @@ self.__precacheManifest = [
     "url": "/love-and-producer-cost-counter/static/js/runtime~main.fcbacba2.js"
   },
   {
-    "revision": "2d8c2e479686ff32e4df",
-    "url": "/love-and-producer-cost-counter/static/js/main.a3f3f01c.chunk.js"
+    "revision": "7733f772f16feaa3096b",
+    "url": "/love-and-producer-cost-counter/static/js/main.67bcb5ca.chunk.js"
   },
   {
     "revision": "6099444a1a475b373b95",
     "url": "/love-and-producer-cost-counter/static/js/2.92f45555.chunk.js"
   },
   {
-    "revision": "2d8c2e479686ff32e4df",
+    "revision": "7733f772f16feaa3096b",
     "url": "/love-and-producer-cost-counter/static/css/main.3ba93ee5.chunk.css"
   },
   {
@@ -20,7 +20,7 @@ self.__precacheManifest = [
     "url": "/love-and-producer-cost-counter/static/css/2.3fec388c.chunk.css"
   },
   {
-    "revision": "e903f65b5e37239505496ae60e4993c2",
+    "revision": "bb7e57d4a3de1e6e75f5ed4b0351799c",
     "url": "/love-and-producer-cost-counter/index.html"
   }
 ];
