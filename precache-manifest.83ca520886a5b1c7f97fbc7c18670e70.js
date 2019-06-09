@@ -4,23 +4,23 @@ self.__precacheManifest = [
     "url": "/love-and-producer-cost-counter/static/js/runtime~main.fcbacba2.js"
   },
   {
-    "revision": "d44b03821efda679a8ef",
-    "url": "/love-and-producer-cost-counter/static/js/main.984a2533.chunk.js"
+    "revision": "2d8c2e479686ff32e4df",
+    "url": "/love-and-producer-cost-counter/static/js/main.a3f3f01c.chunk.js"
   },
   {
-    "revision": "05eab4076f48178f97fa",
-    "url": "/love-and-producer-cost-counter/static/js/2.7337812d.chunk.js"
+    "revision": "6099444a1a475b373b95",
+    "url": "/love-and-producer-cost-counter/static/js/2.92f45555.chunk.js"
   },
   {
-    "revision": "d44b03821efda679a8ef",
+    "revision": "2d8c2e479686ff32e4df",
     "url": "/love-and-producer-cost-counter/static/css/main.3ba93ee5.chunk.css"
   },
   {
-    "revision": "05eab4076f48178f97fa",
+    "revision": "6099444a1a475b373b95",
     "url": "/love-and-producer-cost-counter/static/css/2.3fec388c.chunk.css"
   },
   {
-    "revision": "c45d74c165aa00c9095c3c818137da6f",
+    "revision": "e903f65b5e37239505496ae60e4993c2",
     "url": "/love-and-producer-cost-counter/index.html"
   }
 ];
