@@ -44,6 +44,7 @@ export const activityItems = [
 export const changeLog = {
   '[19.06.09]': [
     '上線',
+    '調整Q & A第四條錯誤描述'
   ]
 };
 
@@ -62,6 +63,6 @@ export const qAndA = [
   },
   {
     title: `為何最下方表列沒有1SSR+4R的結果？`,
-    description: `每張SSR隱含有取得相同角色之R卡，因此「目標1SSR」+「其他3R」及表示「目標4SSR(含目標1R及其他3R)」`
+    description: `每張SSR隱含有取得相同角色之R卡，因此「目標1SSR」+「其他3R」即表示「目標1SSR(含目標1R)及其他3R」。`
   },
 ]
