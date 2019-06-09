@@ -91,20 +91,20 @@ class Summer extends Component<any, any> {
       for (let i = 0; i < 5; i++) {
         for (let j = 4 - i; j >= 0; j--) {
           const 所需總船票 = perRNeedItemsCount * j + perSSRNeedItemsCount * i;
-          const 機率掉落船票後仍需船票數 = function() {
-            if (所需總船票 > afterStage2Count) {
-              return (所需總船票 - afterStage2Count) / afterStage2Probability +
-                (afterStage2Count - afterStage1Count) / afterStage1Probability +
-                afterStage1Count;
-            } else if (所需總船票 > afterStage1Count) {
-              return (所需總船票 - afterStage1Count) / afterStage1Probability + afterStage1Count;
+          const 機率掉落船票後仍需船票數 = function(g) {
+            if (所需總船票 > g.state.stage2) {
+              return (所需總船票 - g.state.stage2) / afterStage2Probability +
+                (g.state.stage2 - g.state.stage1) / afterStage1Probability +
+                g.state.stage1;
+            } else if (所需總船票 > g.state.stage1) {
+              return (所需總船票 - g.state.stage1) / afterStage1Probability + g.state.stage1;
             }
 
             return 所需總船票;
-          }();
-          const 扣除贈送額度後仍需船票數 = function () {
-            return 機率掉落船票後仍需船票數 - gift - (freePerDay * duration) * (i + j);
-          }();
+          }(this);
+          const 扣除贈送額度後仍需船票數 = function (g) {
+            return 機率掉落船票後仍需船票數 - gift - (g.state.free * g.state.du) * (i + j);
+          }(this);
           const 扣除禮盒後仍需船票數 = function (g) {
             return 扣除贈送額度後仍需船票數 - _.sumBy(g.state.dataSource, '可獲總船票數');
           }(this);
