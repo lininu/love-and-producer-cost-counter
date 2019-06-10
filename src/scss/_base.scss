@@ -8,6 +8,10 @@
   padding-bottom: .25rem;
 }
 
+.table-hover-info.table-hover tbody tr:hover {
+  background-color: rgba($cyan, .2);
+}
+
 .width {
   &--xs {
     width: 1rem;
