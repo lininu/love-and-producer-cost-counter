@@ -93,11 +93,11 @@ class Summer extends Component<any, any> {
           const 所需總船票 = perRNeedItemsCount * j + perSSRNeedItemsCount * i;
           const 機率掉落船票後仍需船票數 = function(g) {
             if (所需總船票 > g.state.stage2) {
-              return (所需總船票 - g.state.stage2) / afterStage2Probability +
-                (g.state.stage2 - g.state.stage1) / afterStage1Probability +
+              return _.ceil((所需總船票 - g.state.stage2) / afterStage2Probability) +
+              _.ceil((g.state.stage2 - g.state.stage1) / afterStage1Probability) +
                 g.state.stage1;
             } else if (所需總船票 > g.state.stage1) {
-              return (所需總船票 - g.state.stage1) / afterStage1Probability + g.state.stage1;
+              return _.ceil((所需總船票 - g.state.stage1) / afterStage1Probability) + g.state.stage1;
             }
 
             return 所需總船票;
@@ -240,7 +240,7 @@ class Summer extends Component<any, any> {
           </div>
           <div className="col-12">
             <div className="table-responsive">
-              <table className="table table-striped table-hover">
+              <table className="table table-striped table-hover table-hover-info">
                 <thead>
                   <tr>
                     {_.map(result[0], (value: any, key: any) =>
