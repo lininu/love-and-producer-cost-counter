@@ -90,7 +90,8 @@ class Summer extends Component<any, any> {
       let result:any = [];
       for (let i = 0; i < 5; i++) {
         for (let j = 4 - i; j >= 0; j--) {
-          const 所需總船票 = perRNeedItemsCount * j + perSSRNeedItemsCount * i;
+          const 期間減一 = this.state.du - 1 >= 0 ? this.state.du - 1 : 0;
+          const 所需總船票 = perRNeedItemsCount * j + perSSRNeedItemsCount * i + ((4 - i - j) * this.state.free * 期間減一);
           const 機率掉落船票後仍需船票數 = function(g) {
             if (所需總船票 > g.state.stage2) {
               return _.ceil((所需總船票 - g.state.stage2) / afterStage2Probability) +
@@ -103,7 +104,10 @@ class Summer extends Component<any, any> {
             return 所需總船票;
           }(this);
           const 扣除贈送額度後仍需船票數 = function (g) {
-            return 機率掉落船票後仍需船票數 - gift - (g.state.free * g.state.du) * (i + j);
+            const 期間減一 = g.state.du - 1 >= 0 ? g.state.du - 1 : 0;
+            const 目標每日額度 = (g.state.free * g.state.du) * (i + j);
+            const 其他非目標的每日額度 = (g.state.free * 期間減一) * (4 - i - j);
+            return 機率掉落船票後仍需船票數 - gift - 目標每日額度 - 其他非目標的每日額度;
           }(this);
           const 扣除禮盒後仍需船票數 = function (g) {
             return 扣除贈送額度後仍需船票數 - _.sumBy(g.state.dataSource, '可獲總船票數');
