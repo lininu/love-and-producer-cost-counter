@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/love-and-producer-cost-counter/precache-manifest.24dc650942d6d0eff744f1406f1837a0.js"
+  "/love-and-producer-cost-counter/precache-manifest.f0b92d95d26d4d9bcdd506d5156dc35b.js"
 );
 
 workbox.clientsClaim();
