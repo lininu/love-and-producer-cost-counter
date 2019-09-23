@@ -41,6 +41,22 @@ export const activityItems = [
     [CONST.COIN]: null,
     [CONST.LIMIT]: null,
     [CONST.ADVICE]: 0,
+  }, {
+    key: '臥看雙星',
+    [CONST.PRICE]: 150,
+    [CONST.DIMAND]: 0,
+    [CONST.ACTIVITY_ITEM]: 207,
+    [CONST.COIN]: null,
+    [CONST.LIMIT]: null,
+    [CONST.ADVICE]: 0,
+  }, {
+    key: '星河流螢',
+    [CONST.PRICE]: 500,
+    [CONST.DIMAND]: 0,
+    [CONST.ACTIVITY_ITEM]: 890,
+    [CONST.COIN]: null,
+    [CONST.LIMIT]: null,
+    [CONST.ADVICE]: 0,
   }
 ];
 
